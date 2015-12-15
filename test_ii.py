@@ -1,17 +1,20 @@
 __author__ = 'julianalouback'
-
+""" Script to test the Inverted Index Algorithm
+    Must have authority scores file and data file in same directory.
+"""
 
 import csv
-import sys
 import re
 import algo_ii
 
 csv.field_size_limit( 2**27 )  # NOTE: was sys.maxsize
 
+
 def clean(word):
     word =  word.lower()
     return re.sub(r"^\W+|\W+$", "", word)
 
+# Loads dictionary with key = doc id, value = authority score
 def get_authorities():
     data= open('authorities_scores.csv', 'r')
     reader = csv.reader(data, delimiter=',', quotechar='\"')
@@ -51,13 +54,14 @@ def test():
         total_hits += hits
         print( index + " accuracy: " + str(hits) + "/" + str(len(citations)) + "\n" )
         report.write(index + " accuracy: " + str(hits) + "/" + str(len(citations)) + "\n")
-        if (count % 50) == 0:
+        if (count % 2000) == 0:
             print( "temp is:" )
             print( total_hits )
             print( "out of " )
             print( total_citations )
             print( "achieved accuracy:" )
             print( total_hits/float(total_citations) )
+    report.write("Final accuracy: " + str(total_hits) + "/" + str(len(total_citations)) + "\n")
     report.close()
     data.close()
 

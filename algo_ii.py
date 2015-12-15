@@ -1,7 +1,9 @@
 __author__ = 'julianalouback'
+""" The Inverted Index Algorithm
+    See documentation for detailed explanation
+"""
 
 import csv
-import sys
 
 csv.field_size_limit( 2**30 )   # was sys.maxsize
 
@@ -10,6 +12,7 @@ THRESHOLD = 0.6
 
 keywords_docsrels = {}
 
+# Populates a dictionary with the keywords and corresponding documents/relevance scores
 def populate_iks_dict():
     with open( 'keywordscores.csv', 'r' ) as iks_file:
         reader = csv.reader( iks_file, delimiter=',', quotechar='\"' )
@@ -18,34 +21,7 @@ def populate_iks_dict():
             del docsrels[-1]
             keywords_docsrels[ row[0] ] = docsrels
 
-"""
-def get_relevance2( keywords ):
-    # NOTE: What if we see a keyword (in 'keywords') that isn't in the dict?
-    # We ignore it. (For now, at least.)
-    all_scores = {}
-    for keyword in keywords:
-        if keyword in keywords_docsrels:
-            all_scores[ keyword ] = keywords_docsrels[ keyword ]
-    return all_scores
-
-# For a list of keywords, returns a dict with keyword as key and list of doc:relevance_score values
-def get_relevance(keywords):
-    counter = 0
-    all_scores = {}
-    with open('keywordscores.csv', 'r') as data:
-        reader = csv.reader(data, delimiter=',', quotechar='\"')
-        for row in reader:
-            kw = row[0]
-            if kw in keywords:
-                counter += 1
-                scores = row[1].split(';')
-                del scores[-1]
-                all_scores[kw] = scores
-                if counter == len(keywords):
-                    break
-    return all_scores
-"""
-
+# Returns scores for documents based on keyword relevance and authority score.
 def get_scores(keywords, authorities):
     # NOTE: What if we see a keyword (in 'keywords') that isn't in the dict?
     # We ignore it. (For now, at least.)
@@ -74,7 +50,7 @@ def get_scores(keywords, authorities):
         top[key] = value
     return top
 
-
+# Returns list of recommended citations sorted in descending order of final score
 def predict_citations( candidates, authorities ):
     keywords = []
     for candidate in candidates:
